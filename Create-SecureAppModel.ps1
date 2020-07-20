@@ -98,14 +98,17 @@ $credential = New-Object System.Management.Automation.PSCredential($($app.AppId)
 $token = New-PartnerAccessToken -ApplicationId "$($app.AppId)" -Scopes 'https://api.partnercenter.microsoft.com/user_impersonation' -ServicePrincipal -Credential $credential -Tenant $($spn.AppOwnerTenantID) -UseAuthorizationCode
 write-host "Please approve Exchange consent form." -ForegroundColor Green
 $Exchangetoken = New-PartnerAccessToken -ApplicationId 'a0c73c16-a7e3-4564-9a95-2bdf47383716' -Scopes 'https://outlook.office365.com/.default' -Tenant $($spn.AppOwnerTenantID) -UseDeviceAuthentication
+write-host "Please approve Azure consent form." -ForegroundColor Green
+$Azuretoken = New-PartnerAccessToken -ApplicationId "$($app.AppId)" -Scopes 'https://management.azure.com/user_impersonation' -ServicePrincipal -Credential $credential -Tenant $($spn.AppOwnerTenantID) -UseAuthorizationCode
 write-host "Last initation required: Please browse to https://login.microsoftonline.com/$($spn.AppOwnerTenantID)/adminConsent?client_id=$($app.AppId)"
 write-host "Press any key after auth. An error report about incorrect URIs is expected!"
 [void][System.Console]::ReadKey($true)
-Write-Host "================ Secrets ================"
-Write-Host "`$ApplicationId         = $($app.AppId)"
-Write-Host "`$ApplicationSecret     = $($password.Value)"
-Write-Host "`$TenantID              = $($spn.AppOwnerTenantID)"
-write-host "`$RefreshToken          = $($token.refreshtoken)" -ForegroundColor Blue
-write-host "`$Exchange RefreshToken = $($ExchangeToken.Refreshtoken)" -ForegroundColor Green
-Write-Host "================ Secrets ================"
+Write-Host "######### Secrets #########"
+Write-Host "`$ApplicationId         = '$($app.AppId)'"
+Write-Host "`$ApplicationSecret     = '$($password.Value)'"
+Write-Host "`$TenantID              = '$($spn.AppOwnerTenantID)'"
+write-host "`$RefreshToken          = '$($token.refreshtoken)'" -ForegroundColor Blue
+write-host "`$ExchangeRefreshToken = '$($ExchangeToken.Refreshtoken)'" -ForegroundColor Green
+write-host "`$AzureRefreshToken =   '$($Azuretoken.Refreshtoken)'" -ForegroundColor Magenta
+Write-Host "######### Secrets #########"
 Write-Host "    SAVE THESE IN A SECURE LOCATION     " 
